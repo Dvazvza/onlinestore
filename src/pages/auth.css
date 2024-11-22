@@ -1,0 +1,29 @@
+/* src/pages/auth.css */
+.auth-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .submitted-info {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #0f3460;
+    border-radius: 5px;
+    background-color: #e7f3fe;
+    color: #0f3460;
+  }
+  
+  .link {
+    text-align: center;
+    margin-top: 10px;
+  }

@@ -1,0 +1,11 @@
+/* src/components/Section.css */
+.product-list {
+    display: flex; /* استخدام flexbox */
+    flex-wrap: wrap; /* السماح للعناصر باللف إلى السطر التالي */
+    justify-content: space-between; /* توزيع العناصر بالتساوي */
+}
+
+.product {
+    flex: 1 1 30%; /* تحديد عرض المنتج (يمكنك تعديل النسبة حسب الحاجة) */
+    margin: 10px; /* إضافة مسافة بين المنتجات */
+}
