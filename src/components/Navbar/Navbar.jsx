@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import "./navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const NavBar = () => {
   const { cartList } = useSelector((state) => state.cart);
   const [expand, setExpand] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  // Vérifier si l'utilisateur est connecté
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   function scrollHandler() {
     if (window.scrollY >= 100) {
@@ -23,6 +33,16 @@ const NavBar = () => {
       window.removeEventListener("scroll", scrollHandler);
     };
   }, []);
+
+  // Fonction pour gérer la déconnexion
+  const handleLogout = () => {
+    // Supprimer les données utilisateur du localStorage
+    localStorage.removeItem("user");
+    // Mettre à jour l'état
+    setIsLoggedIn(false);
+    // Rediriger vers la page d'accueil
+    navigate("/");
+  };
 
   return (
     <Navbar
@@ -102,23 +122,46 @@ const NavBar = () => {
                 <span className="nav-link-label">Contact</span>
               </Link>
             </Nav.Item>
+            
+            {/* Afficher "Login" ou "Logout" en fonction de l'état de connexion */}
             <Nav.Item>
-              <Link
-                aria-label="Go to Login Page"
-                className="navbar-link"
-                to="/login"
-                onClick={() => setExpand(false)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="black"
-                  className="nav-icon"
+              {isLoggedIn ? (
+                <button
+                  aria-label="Logout"
+                  className="navbar-link logout-btn"
+                  onClick={() => {
+                    handleLogout();
+                    setExpand(false);
+                  }}
                 >
-                  <path d="M16 12l-4-4v3H4v2h8v3l4-4z" />
-                </svg>
-                <span className="nav-link-label">Login</span>
-              </Link>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="black"
+                    className="nav-icon"
+                  >
+                    <path d="M16 13v-2H7V8l-5 4 5 4v-3h9z" />
+                  </svg>
+                  <span className="nav-link-label">Logout</span>
+                </button>
+              ) : (
+                <Link
+                  aria-label="Go to Login Page"
+                  className="navbar-link"
+                  to="/login"
+                  onClick={() => setExpand(false)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="black"
+                    className="nav-icon"
+                  >
+                    <path d="M16 12l-4-4v3H4v2h8v3l4-4z" />
+                  </svg>
+                  <span className="nav-link-label">Login</span>
+                </Link>
+              )}
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>

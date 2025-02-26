@@ -6,53 +6,42 @@ import Footer from "./components/Footer/Footer";
 import Loader from "./components/Loader/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ContactPage from "./components/contact";
-import Checkout from "./pages/Checkout";
-import SignUp from "./pages/SignUp"; // Import SignUp page
-import 'bootstrap/dist/css/bootstrap.min.css';
-import AdminDashboard from "./pages/AdminDashboard"; // Importer la page de tableau de bord
-
-
-
-
-
-const Home = lazy(() => import("./pages/Home"));
-const Shop = lazy(() => import("./pages/Shop"));
-const Cart = lazy(() => import("./pages/Cart"));
-const Product = lazy(() => import("./pages/Product"));
-const Login = lazy(() => import("./pages/Login")); // Import Login page
+import AdminDashboard from "./pages/AdminDashboard"; // Import AdminDashboard page
+import ShopRoutes from "./shopRoutes"; // Import ShopRoutes
 
 function App() {
   return (
-    <Suspense fallback={<Loader />}>
-      <Router>
-        <ToastContainer
-          position="top-right"
-          autoClose={1000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        <NavBar />
+    <Router>
+      {/* ToastContainer for notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
+      {/* NavBar for consistent navigation */}
+     
+
+      {/* Suspense for lazy loading */}
+      <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/:id" element={<Product />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<SignUp />} />
+          {/* Admin Dashboard Route */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          
+
+          {/* Main Shop Routes */}
+          <Route path="/*" element={<ShopRoutes />} />
         </Routes>
-        <Footer />
-      </Router>
-    </Suspense>
+      </Suspense>
+
+      {/* Footer for consistent UI */}
+     
+    </Router>
   );
 }
 

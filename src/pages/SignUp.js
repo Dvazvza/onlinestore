@@ -1,22 +1,56 @@
 import React, { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import './auth.css'; // Import the same CSS file
+import './auth.css'; // استيراد ملف التنسيق
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [message, setMessage] = useState(null); // حالة لتخزين الرسالة
+  const [variant, setVariant] = useState("danger"); // لون الرسالة
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+
+    // التحقق من أن كلمتي المرور متطابقتان
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match!");
+      setVariant("danger");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, confirmPassword }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage(data.message);
+        setVariant("success");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+      } else {
+        setMessage(data.message || "Something went wrong!");
+        setVariant("danger");
+      }
+    } catch (error) {
+      setMessage("Server error! Please try again.");
+      setVariant("danger");
+    }
   };
 
   return (
     <Container className="auth-container">
       <h2>Sign Up</h2>
+
+      {message && <Alert variant={variant}>{message}</Alert>}
+
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
@@ -55,14 +89,6 @@ const SignUp = () => {
           Sign Up
         </Button>
       </Form>
-
-      {submitted && (
-        <div className="submitted-info">
-          <h3>Submitted Information:</h3>
-          <p>Email: {email}</p>
-          <p>Password: {password}</p>
-        </div>
-      )}
 
       <p className="link">
         Already have an account? <Link to="/login">Login here</Link>
